@@ -72,7 +72,7 @@ end
 -- SEPARATION
 local a = library
 -- name, color, textcolor, position, size, CallBack
-a:CreateFrame("Created by Blissful#4992", Color3.fromRGB(0, 0, 255), Color3.fromRGB(255, 255, 255), 30, Vector2.new(1000, 750), Vector2.new(200, 100))
+a:CreateFrame("Blissful#4992", Color3.fromRGB(0, 0, 255), Color3.fromRGB(255, 255, 255), 30, Vector2.new(1000, 750), Vector2.new(200, 100))
 a:CreateButton("Click Me", Color3.fromRGB(255, 0, 0), Color3.fromRGB(0, 0, 0), 15, Vector2.new(200, 750), Vector2.new(200, 100), function()
     print("hello")
 end)
