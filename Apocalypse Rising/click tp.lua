@@ -11,7 +11,7 @@ local function tp(x, y, z)
 end
 
 UIS.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+    if input.UserInputType == Enum.UserInputType.MouseButton1 and UIS:IsKeyDown(Enum.KeyCode.LeftControl) then
         tp(Mouse.Hit.X,Mouse.Hit.Y+3,Mouse.Hit.Z)
     end
 end)
