@@ -1,4 +1,4 @@
--- Made by Blissful#4992, u can ass stuff to this here's template a1 = {'VARIABLE', 0}
+-- Made by Blissful#4992, you can add stuff to this here's template a1 = {<string> 'varname', <int> 10}
 local list = {
     str1 = {'RecoilMult', 0},
     str2 = {'ReloadTime', 0},
