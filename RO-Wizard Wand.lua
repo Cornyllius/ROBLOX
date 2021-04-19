@@ -1,10 +1,5 @@
 spawn(function()
     for i, v in next, getgc(true) do
-        if type(v) == 'table' and rawget(v, 'Gems') then
-            v.Gems = 0
-        end
-    end
-    for i, v in next, getgc(true) do
         if type(v) == 'table' and rawget(v, 'Damage') then
             coroutine.wrap(function()
                 while wait(0.1) do
@@ -22,6 +17,9 @@ spawn(function()
                     end
                 end
             end)()
+        end
+        if type(v) == 'table' and rawget(v, 'Gems') then
+            v.Gems = 0
         end
     end
 end)
