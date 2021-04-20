@@ -2,22 +2,24 @@ local player = game:GetService("Players").LocalPlayer
 local UIS = game:GetService("UserInputService")
 local Mouse = player:GetMouse()
 
+local mt = getrawmetatable(game)
+setreadonly(mt, false)
+local old = mt.__index
+
+local deb = false  
+local opos = player.Character.HumanoidRootPart.Position
+
+mt.__index = newcclosure(function(self, key)
+    if self == "HumanoidRootPart" and self.Parent == player.Character and key == "CFrame" and deb then
+        return opos
+    end
+    return old(self, key)
+end)
+
 local function tp(newpos)
     if player.Character ~= nil and player.Character:FindFirstChild("HumanoidRootPart") ~= nil then
-        local opos = player.Character.HumanoidRootPart
-        local deb = true
-        
-        local mt = getrawmetatable(game)
-        setreadonly(mt, false)
-        local old = mt.__index
-        
-        mt.__index = newcclosure(function(self, key)
-            if self == "HumanoidRootPart" and self.Parent == player.Character and key == "CFrame" and deb then
-                return opos
-            end
-            return old(self, key)
-        end)
-        
+        opos = player.Character.HumanoidRootPart.Position
+        deb = true
         player.Character.HumanoidRootPart.CFrame = CFrame.new(newpos)
         deb = false
     end
@@ -28,4 +30,3 @@ UIS.InputBegan:Connect(function(input)
         tp(Mouse.Hit.p + Vector3.new(0, 3, 0))
     end
 end)
-
