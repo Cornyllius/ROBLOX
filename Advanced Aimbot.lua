@@ -30,6 +30,40 @@ UIS.InputEnded:Connect(function(input)
     end
 end)
 
+-- Closest Player () function if you want to integrate in an aimbot (also has fov circle)
+--[[
+local player = game.Players.LocalPlayer
+local camera = game.Workspace.CurrentCamera
+
+local FOV = Drawing.new("Circle")
+FOV.Visible = true
+FOV.Color = Color3.fromRGB(255, 255, 255)
+FOV.Transparency = 1
+FOV.NumSides = 75
+FOV.Radius = 100
+FOV.Filled = false
+FOV.Thickness = 1
+
+local function GetClosest()
+    local min = math.huge
+    local closest = nil
+    for i, v in pairs(game:GetService("Players"):GetChildren()) do
+        if v.Name ~= player.Name and v.Character ~= nil and v.Character:FindFirstChild("HumanoidRootPart") then
+            local dist = (player.Character.HumanoidRootPart.Position - v.Character.HumanoidRootPart.Position).magnitude
+            local pos, vis = camera:WorldToViewportPoint(v.Character.HumanoidRootPart.Position)
+            if vis then
+                local d = (Vector2.new(pos.X, pos.Y) - FOV.Position).magnitude
+                if d <= FOV.Radius and dist < min then
+                    min = dist
+                    closest = v
+                end
+            end
+        end
+    end
+    return closest
+end
+]]
+
 local gui_inset = game:GetService("GuiService"):GetGuiInset()
 
 game:GetService("RunService").RenderStepped:Connect(function()
