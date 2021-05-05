@@ -65,6 +65,9 @@ end
 ]]
 
 local gui_inset = game:GetService("GuiService"):GetGuiInset()
+local function AIMREL(vector2, factor)
+    mousemoverel((vector2.X - mouse.X - gui_inset.X) * factor, (vector2.Y - mouse.Y - gui_inset.Y) * factor)
+end
 
 game:GetService("RunService").RenderStepped:Connect(function()
     if aimbot then
@@ -75,60 +78,71 @@ game:GetService("RunService").RenderStepped:Connect(function()
                     if Visible(v.Position, v) == true then
                         local part_pos, v_pos = camera:WorldToViewportPoint(v.Position)
                         if v_pos then
-                            mousemoverel((part_pos.X - mouse.X - gui_inset.X) * sens, (part_pos.Y - mouse.Y - gui_inset.Y) * sens)
+                            AIMREL(part_pos, sens)
                             break
                         end
                     else
                         if v.Name == "HumanoidRootPart" then
-                            if Visible((v.CFrame * CFrame.new(v.Size.X/2.5, 0, 0)).p, v) == true then
-                                local part_pos, v_pos = camera:WorldToViewportPoint((v.CFrame * CFrame.new(v.Size.X/2.5, 0, 0)).p)
+                            local p1 = (v.CFrame * CFrame.new(v.Size.X/2.5, 0, 0)).p
+                            local p2 = (v.CFrame * CFrame.new(-v.Size.X/2.5, 0, 0)).p
+                            if Visible(p1, v) == true then
+                                local part_pos, v_pos = camera:WorldToViewportPoint(p1)
                                 if v_pos then
-                                    mousemoverel((part_pos.X - mouse.X - gui_inset.X) * sens, (part_pos.Y - mouse.Y - gui_inset.Y) * sens)
+                                    AIMREL(part_pos, sens)
                                 end
-                            elseif Visible((v.CFrame * CFrame.new(-v.Size.X/2.5, 0, 0)).p, v) == true then
-                                local part_pos, v_pos = camera:WorldToViewportPoint((v.CFrame * CFrame.new(-v.Size.X/2.5, 0, 0)).p)
+                            elseif Visible(p2, v) == true then
+                                local part_pos, v_pos = camera:WorldToViewportPoint(p2)
                                 if v_pos then
-                                    mousemoverel((part_pos.X - mouse.X - gui_inset.X) * sens, (part_pos.Y - mouse.Y - gui_inset.Y) * sens)
-                                end
-                            end
-                        elseif string.match(v.Name, "Left") then
-                            if Visible((v.CFrame * CFrame.new(-v.Size.X/2.5, 0, 0)).p, v) == true then
-                                local part_pos, v_pos = camera:WorldToViewportPoint((v.CFrame * CFrame.new(-v.Size.X/2.5, 0, 0)).p)
-                                if v_pos then
-                                    mousemoverel((part_pos.X - mouse.X - gui_inset.X) * sens, (part_pos.Y - mouse.Y - gui_inset.Y) * sens)
-                                end
-                            elseif Visible((v.CFrame * CFrame.new(-v.Size.X/2.5, 0, v.Size.Z/2.5)).p, v) == true then
-                                local part_pos, v_pos = camera:WorldToViewportPoint((v.CFrame * CFrame.new(-v.Size.X/2.5, 0, v.Size.Z/2.5)).p)
-                                if v_pos then
-                                    mousemoverel((part_pos.X - mouse.X - gui_inset.X) * sens, (part_pos.Y - mouse.Y - gui_inset.Y) * sens)
-                                end
-                            elseif Visible((v.CFrame * CFrame.new(-v.Size.X/2.5, 0, -v.Size.Z/2.5)).p, v) == true then
-                                local part_pos, v_pos = camera:WorldToViewportPoint((v.CFrame * CFrame.new(-v.Size.X/2.5, 0, -v.Size.Z/2.5)).p)
-                                if v_pos then
-                                    mousemoverel((part_pos.X - mouse.X - gui_inset.X) * sens, (part_pos.Y - mouse.Y - gui_inset.Y) * sens)
+                                    AIMREL(part_pos, sens)
                                 end
                             end
-                        elseif string.match(v.Name, "Right") then
-                            if Visible((v.CFrame * CFrame.new(v.Size.X/2.5, 0, 0)).p, v) == true then
-                                local part_pos, v_pos = camera:WorldToViewportPoint((v.CFrame * CFrame.new(v.Size.X/2.5, 0, 0)).p)
+                        elseif string.match(v.Name, "Left") and string.match(v.Name, "Arm") then
+                            local p1 = (v.CFrame * CFrame.new(-v.Size.X/2.5, 0, 0)).p
+                            local p2 = (v.CFrame * CFrame.new(-v.Size.X/2.5, 0, v.Size.Z/2.5)).p
+                            local p3 = (v.CFrame * CFrame.new(-v.Size.X/2.5, 0, -v.Size.Z/2.5)).p
+                            if Visible(p1, v) == true then
+                                local part_pos, v_pos = camera:WorldToViewportPoint(p1)
                                 if v_pos then
-                                    mousemoverel((part_pos.X - mouse.X - gui_inset.X) * sens, (part_pos.Y - mouse.Y - gui_inset.Y) * sens)
+                                    AIMREL(part_pos, sens)
                                 end
-                            elseif Visible((v.CFrame * CFrame.new(v.Size.X/2.5, 0, v.Size.Z/2.5)).p, v) == true then
-                                local part_pos, v_pos = camera:WorldToViewportPoint((v.CFrame * CFrame.new(v.Size.X/2.5, 0, v.Size.Z/2.5)).p)
+                            elseif Visible(p2, v) == true then
+                                local part_pos, v_pos = camera:WorldToViewportPoint(p2)
                                 if v_pos then
-                                    mousemoverel((part_pos.X - mouse.X - gui_inset.X) * sens, (part_pos.Y - mouse.Y - gui_inset.Y) * sens)
+                                    AIMREL(part_pos, sens)
                                 end
-                            elseif Visible((v.CFrame * CFrame.new(v.Size.X/2.5, 0, -v.Size.Z/2.5)).p, v) == true then
-                                local part_pos, v_pos = camera:WorldToViewportPoint((v.CFrame * CFrame.new(v.Size.X/2.5, 0, -v.Size.Z/2.5)).p)
+                            elseif Visible(p3, v) == true then
+                                local part_pos, v_pos = camera:WorldToViewportPoint(p3)
                                 if v_pos then
-                                    mousemoverel((part_pos.X - mouse.X - gui_inset.X) * sens, (part_pos.Y - mouse.Y - gui_inset.Y) * sens)
+                                    AIMREL(part_pos, sens)
                                 end
                             end
-                        elseif v.Name == "Head" and Visible((v.CFrame * CFrame.new(0, v.Size.Y/2.5, 0)).p, v) == true then
-                            local part_pos, v_pos = camera:WorldToViewportPoint((v.CFrame * CFrame.new(0, v.Size.Y/2.5, 0)).p)
-                            if v_pos then
-                                mousemoverel((part_pos.X - mouse.X - gui_inset.X) * sens, (part_pos.Y - mouse.Y - gui_inset.Y) * sens)
+                        elseif string.match(v.Name, "Right") and string.match(v.Name, "Arm") then
+                            local p1 = (v.CFrame * CFrame.new(v.Size.X/2.5, 0, 0)).p
+                            local p2 = (v.CFrame * CFrame.new(v.Size.X/2.5, 0, v.Size.Z/2.5)).p
+                            local p3 = (v.CFrame * CFrame.new(v.Size.X/2.5, 0, -v.Size.Z/2.5)).p
+                            if Visible(p1, v) == true then
+                                local part_pos, v_pos = camera:WorldToViewportPoint(p1)
+                                if v_pos then
+                                    AIMREL(part_pos, sens)
+                                end
+                            elseif Visible(p2, v) == true then
+                                local part_pos, v_pos = camera:WorldToViewportPoint(p2)
+                                if v_pos then
+                                    AIMREL(part_pos, sens)
+                                end
+                            elseif Visible(p3, v) == true then
+                                local part_pos, v_pos = camera:WorldToViewportPoint(p3)
+                                if v_pos then
+                                    AIMREL(part_pos, sens)
+                                end
+                            end
+                        elseif v.Name == "Head" then
+                            local p1 = (v.CFrame * CFrame.new(0, v.Size.Y/2.5, 0)).p
+                            if Visible(p1, v) then
+                                local part_pos, v_pos = camera:WorldToViewportPoint(p1)
+                                if v_pos then
+                                    AIMREL(part_pos, sens)
+                                end
                             end
                         end
                     end
