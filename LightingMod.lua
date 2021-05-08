@@ -75,4 +75,4 @@ local function MOD()
     end
 end
 
-return Mod
+return MOD
