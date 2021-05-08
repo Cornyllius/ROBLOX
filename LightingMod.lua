@@ -1,4 +1,4 @@
-local function GraphicEnhancer()
+-- function?
     local Lighting = game:GetService("Lighting")
     for i, v in pairs(Lighting:GetChildren()) do
         v:Destroy()
@@ -75,4 +75,4 @@ local function GraphicEnhancer()
     end
 end
 
-return GraphicEnhancer()
+-- return 
