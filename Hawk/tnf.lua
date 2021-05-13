@@ -162,52 +162,53 @@ end)
 local TNFPlayer = TNFCategory:Sector("Local Player")
 
 local TNFPlayer_Settings = {
-    stamina = {name = 'stamina', value = 100, toggle = false},
-    hunger = {name = 'hunger', value = 200, toggle = false},
-    warmth = {name = 'warmth', value = 5000, toggle = false}
+    stamina_toggle = false,
+    hunger_toggle = false,
+    warmth_toggle = false,
 }
 
 TNFPlayer:Cheat("Checkbox", "Inf Stamina", function (NewValue)
-    TNFPlayer_Settings.stamina.toggle = NewValue
-end, {enabled = TNFPlayer_Settings.stamina.toggle})
+    TNFPlayer_Settings.stamina_toggle = NewValue
+end, {enabled = TNFPlayer_Settings.stamina_toggle})
 
 TNFPlayer:Cheat("Checkbox", "Inf Hunger", function (NewValue)
-    TNFPlayer_Settings.hunger.toggle = NewValue
-end, {enabled = TNFPlayer_Settings.hunger.toggle})
+    TNFPlayer_Settings.hunger_toggle = NewValue
+end, {enabled = TNFPlayer_Settings.hunger_toggle})
 
 TNFPlayer:Cheat("Checkbox", "Inf Warmth", function (NewValue)
-    TNFPlayer_Settings.warmth.toggle = NewValue
-end, {enabled = TNFPlayer_Settings.warmth.toggle})
+    TNFPlayer_Settings.warmth_toggle = NewValue
+end, {enabled = TNFPlayer_Settings.warmth_toggle})
 
 for i, v in pairs(getgc(true)) do
-    if type(v) == 'table' then
-        if rawget(v, TNFPlayer_Settings.stamina.name) then
-            coroutine.wrap(function()
-                while wait() do
-                    if TNFPlayer_Settings.stamina.toggle then
-                        v[TNFPlayer_Settings.stamina.name] = TNFPlayer_Settings.stamina.value
-                    end
+    if type(v) == 'table' and rawget(v, "stamina") then
+        coroutine.wrap(function()
+            local c 
+            c = game:service("RunService").RenderStepped:Connect(function()
+                if TNFPlayer_Settings.stamina_toggle == true  then
+                    v.stamina = 100
                 end
-            end)()
-        end
-        if rawget(v, TNFPlayer_Settings.hunger.name) then
-            coroutine.wrap(function()
-                while wait() do
-                    if TNFPlayer_Settings.hunger.toggle then
-                        v[TNFPlayer_Settings.hunger.name] = TNFPlayer_Settings.hunger.value
-                    end
+            end)
+        end)()
+    end
+    if type(v) == 'table' and rawget(v, "hunger") then
+        coroutine.wrap(function()
+            local c 
+            c = game:service("RunService").RenderStepped:Connect(function()
+                if TNFPlayer_Settings.hunger_toggle == true  then
+                    v.hunger = 5000
                 end
-            end)()
-        end
-        if rawget(v, TNFPlayer_Settings.warmth.name) then
-            coroutine.wrap(function()
-                while wait() do
-                    if TNFPlayer_Settings.warmth.toggle then
-                        v[TNFPlayer_Settings.warmth.name] = TNFPlayer_Settings.warmth.value
-                    end
+            end)
+        end)()
+    end
+    if type(v) == 'table' and rawget(v, "warmth") then
+        coroutine.wrap(function()
+            local c 
+            c = game:service("RunService").RenderStepped:Connect(function()
+                if TNFPlayer_Settings.warmth_toggle == true  then
+                    v.warmth = 5000
                 end
-            end)()
-        end
+            end)
+        end)()
     end
 end
 
