@@ -1,4 +1,11 @@
 --// The New Frontier //--
+local Player = game:GetService("Players").LocalPlayer
+local Mouse = Player:GetMouse()
+local Camera = game:GetService("Workspace").CurrentCamera
+local UIS = game:GetService("UserInputService")
+local TS = game:GetService("TweenService")
+local Lighting = game:GetService("Lighting")
+
 local args = {...}
 
 local TNFCategory = args[1]:Category(args[2].Name)
