@@ -40,7 +40,7 @@ local function ESP(v, counter)
                 end
             end
             if found then
-                if v ~= nil then
+                if GameVisual_Settings.Item_ESP and v ~= nil then
                     local pos, vis = Camera:WorldToViewportPoint(v.Main.Position)
                     if vis then
                         NAME.Position = Vector2.new(pos.X, pos.Y)
