@@ -165,6 +165,7 @@ local TNFPlayer_Settings = {
     stamina_toggle = false,
     hunger_toggle = false,
     warmth_toggle = false,
+    Click_TP = false
 }
 
 TNFPlayer:Cheat("Checkbox", "Inf Stamina", function (NewValue)
@@ -178,6 +179,10 @@ end, {enabled = TNFPlayer_Settings.hunger_toggle})
 TNFPlayer:Cheat("Checkbox", "Inf Warmth", function (NewValue)
     TNFPlayer_Settings.warmth_toggle = NewValue
 end, {enabled = TNFPlayer_Settings.warmth_toggle})
+
+TNFPlayer:Cheat("Checkbox", "(CTRL + Click) TP", function (NewValue)
+    TNFPlayer_Settings.Click_TP = NewValue
+end, {enabled = TNFPlayer_Settings.Click_TP})
 
 for i, v in pairs(getgc(true)) do
     if type(v) == 'table' and rawget(v, "stamina") then
@@ -211,5 +216,11 @@ for i, v in pairs(getgc(true)) do
         end)()
     end
 end
+
+UIS.InputBegan:Connect(function(input)
+    if TNFPlayer_Settings.Click_TP == true and input.UserInputType == Enum.UserInputType.MouseButton1 and UIS:IsKeyDown(Enum.KeyCode.LeftControl) and Player.Character ~= nil and Player.Character.PrimaryPart ~= nil then
+        Player.Character.PrimaryPart.CFrame = Mouse.Hit.p + Vector3.new(0, 3, 0)
+    end
+end)
 
 --// The New Frontier //-- END
