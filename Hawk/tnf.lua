@@ -32,6 +32,7 @@ end, {color = GameVisual_Settings.Animal_Color})
 
 local Player = game:GetService("Players").LocalPlayer
 local Mouse = Player:GetMouse()
+local UIS = game:GetService("UserInputService")
 local Camera = game:GetService("Workspace").CurrentCamera
 
 local function ESP(v, counter, type)
