@@ -1,5 +1,7 @@
 --// The New Frontier //--
-local TNFCategory = FinityWindow:Category(Current_Game.Name)
+local args = {...}
+
+local TNFCategory = args[1]:Category(args[2].Name)
 
 local TNFVisuals = TNFCategory:Sector("Visuals")
 
@@ -48,7 +50,7 @@ local function ESP(v, counter, type)
         local function Update()
             local c 
             c = game:GetService("RunService").RenderStepped:Connect(function()
-                if DESTROY_GUI then
+                if args[3] then
                     NAME:Remove()
                     c:Disconnect()
                 end
@@ -83,7 +85,7 @@ local function ESP(v, counter, type)
         local function Update()
             local c 
             c = game:GetService("RunService").RenderStepped:Connect(function()
-                if DESTROY_GUI then
+                if args[3] then
                     NAME:Remove()
                     c:Disconnect()
                 end
