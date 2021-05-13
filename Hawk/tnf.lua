@@ -1,1 +1,2 @@
-print("im gay")
+local args = {...}
+print(args[1])
