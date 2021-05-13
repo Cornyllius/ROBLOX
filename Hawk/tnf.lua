@@ -1,5 +1,6 @@
 --// The New Frontier //--
 local Player = game:service("Players").LocalPlayer
+local Mouse = Player:GetMouse()
 local UIS = game:service("UserInputService")
 
 local args = {...}
@@ -32,10 +33,6 @@ end, {enabled = GameVisual_Settings.Animal_ESP})
 TNFVisuals:Cheat("Colorpicker", "Color", function (NewValue)
     GameVisual_Settings.Animal_Color = NewValue
 end, {color = GameVisual_Settings.Animal_Color})
-
-local Player = game:GetService("Players").LocalPlayer
-local Mouse = Player:GetMouse()
-local Camera = game:GetService("Workspace").CurrentCamera
 
 local function ESP(v, counter, type)
     local parent = v.Parent
@@ -221,8 +218,8 @@ for i, v in pairs(getgc(true)) do
 end
 
 UIS.InputBegan:Connect(function(input)
-    if TNFPlayer_Settings.Click_TP == true and input.UserInputType == Enum.UserInputType.MouseButton1 and UIS:IsKeyDown(Enum.KeyCode.LeftControl) and Player.Character ~= nil and Player.Character.PrimaryPart ~= nil then
-        Player.Character.PrimaryPart.CFrame = Mouse.hit + Vector3.new(0, 3, 0)
+    if TNFPlayer_Settings.Click_TP == true and input.UserInputType == Enum.UserInputType.MouseButton1 and UIS:IsKeyDown(Enum.KeyCode.LeftControl) and Player.Character ~= nil and Player.Character:FindFirstChild("HumanoidRootPart") then
+        Player.Character.HumanoidRootPart.CFrame = Mouse.Hit + Vector3.new(0, 3, 0)
     end
 end)
 
