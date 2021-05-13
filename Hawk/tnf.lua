@@ -19,8 +19,8 @@ TNFVisuals:Cheat("Checkbox", "Items", function (NewValue)
 end, {enabled = GameVisual_Settings.Item_ESP})
 
 TNFVisuals:Cheat("Colorpicker", "Color", function (NewValue)
-    GameVisual_Settings.Color = NewValue
-end, {color = GameVisual_Settings.Color})
+    GameVisual_Settings.Item_Color = NewValue
+end, {color = GameVisual_Settings.Item_Color})
 
 TNFVisuals:Cheat("Checkbox", "Animals", function (NewValue)
     GameVisual_Settings.Animal_ESP = NewValue
