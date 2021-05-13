@@ -1,10 +1,10 @@
 --// The New Frontier //--
-local Player = game:GetService("Players").LocalPlayer
+local Player = game:service("Players").LocalPlayer
 local Mouse = Player:GetMouse()
-local Camera = game:GetService("Workspace").CurrentCamera
-local UIS = game:GetService("UserInputService")
-local TS = game:GetService("TweenService")
-local Lighting = game:GetService("Lighting")
+local Camera = game:service("Workspace").CurrentCamera
+local UIS = game:service("UserInputService")
+local TS = game:service("TweenService")
+local Lighting = game:service("Lighting")
 
 local args = {...}
 
