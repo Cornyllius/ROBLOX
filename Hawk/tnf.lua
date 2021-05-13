@@ -2,6 +2,8 @@
 local args = {...}
 
 local TNFCategory = args[1]:Category(args[2].Name)
+print(tostring(args[1]))
+print(args[2].Name)
 
 local TNFVisuals = TNFCategory:Sector("Visuals")
 
