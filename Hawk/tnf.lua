@@ -222,7 +222,7 @@ end
 
 UIS.InputBegan:Connect(function(input)
     if TNFPlayer_Settings.Click_TP == true and input.UserInputType == Enum.UserInputType.MouseButton1 and UIS:IsKeyDown(Enum.KeyCode.LeftControl) and Player.Character ~= nil and Player.Character.PrimaryPart ~= nil then
-        Player.Character.PrimaryPart.CFrame = CFrame.new(Mouse.Hit.p + Vector3.new(0, 3, 0))
+        Player.Character.PrimaryPart.CFrame = Mouse.hit + Vector3.new(0, 3, 0)
     end
 end)
 
