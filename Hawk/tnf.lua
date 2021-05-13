@@ -169,6 +169,7 @@ local TNFPlayer_Settings = {
 }
 
 local Click_TP = false
+local Click_Destroy = false
 
 TNFPlayer:Cheat("Checkbox", "Inf Stamina", function (NewValue)
     TNFPlayer_Settings.stamina_toggle = NewValue
@@ -185,6 +186,10 @@ end, {enabled = TNFPlayer_Settings.warmth_toggle})
 TNFPlayer:Cheat("Checkbox", "(Ctrl + Click) TP", function (NewValue)
     Click_TP = NewValue
 end, {enabled = Click_TP})
+
+TNFPlayer:Cheat("Checkbox", "(Ctrl + Click) Destroy", function (NewValue)
+    Click_Destroy = NewValue
+end, {enabled = Click_Destroy})
 
 for i, v in pairs(getgc(true)) do
     if type(v) == 'table' and rawget(v, "stamina") then
@@ -228,6 +233,9 @@ end
 UIS.InputBegan:Connect(function(input)
     if Click_TP == true and input.UserInputType == Enum.UserInputType.MouseButton1 and UIS:IsKeyDown(Enum.KeyCode.LeftControl) then
         To(Mouse.Hit.p + Vector3.new(0, 3, 0))
+    end
+    if Click_Destroy == true and input.UserInputType == Enum.UserInputType.MouseButton1 and UIS:IsKeyDown(Enum.KeyCode.LeftControl) then
+        Mouse.Target:Destroy()
     end
 end)
 
