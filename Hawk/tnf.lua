@@ -35,6 +35,26 @@ local Mouse = Player:GetMouse()
 local UIS = game:GetService("UserInputService")
 local Camera = game:GetService("Workspace").CurrentCamera
 
+if Player.Character.Server:FindFirstChildOfClass("LocalScript") then
+            local function dltchild(root, n, class)
+                local c = 0
+                for _,v in pairs(root:GetChildren()) do
+                    if v:IsA(class) then
+                        c = c + 1
+                        if c == n then
+                            v:Destroy()
+                            break
+                        end
+                    end
+                end
+            end
+            for i = 3, 1, -1 do
+                dltchild(Player.PlayerScripts, i, "LocalScript")
+            end
+            dltchild(Player.Character, 1, "LocalScript")
+            Player.Character.Server:FindFirstChildOfClass("LocalScript"):Destroy()
+        end
+
 local function ESP(v, counter, type)
     local parent = v.Parent
     
