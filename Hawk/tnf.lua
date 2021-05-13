@@ -52,7 +52,7 @@ local function ESP(v, counter, type)
         local function Update()
             local c 
             c = game:GetService("RunService").RenderStepped:Connect(function()
-                if args[3] == true then
+                if game.CoreGui:FindFirstChild("FinityUI") == false then
                     NAME:Remove()
                     c:Disconnect()
                 end
@@ -87,7 +87,7 @@ local function ESP(v, counter, type)
         local function Update()
             local c 
             c = game:GetService("RunService").RenderStepped:Connect(function()
-                if args[3] == true then
+                if game.CoreGui:FindFirstChild("FinityUI") == false then
                     NAME:Remove()
                     c:Disconnect()
                 end
