@@ -116,7 +116,7 @@ local DESTROY_GUI = false
 _G["Layout"] = {}
 
 _G["Theme"] = {
-    ["Category_Text"] = Color3.fromRGB(255, 255, 140),
+    ["Category_Text"] = Color3.fromRGB(255, 255, 255),
     ["Category_Back"] = Color3.fromRGB(0, 0, 0),
     ["Category_Back_Transparency"] = 0.75,
 
@@ -124,7 +124,7 @@ _G["Theme"] = {
     ["Option_Back"] = Color3.fromRGB(0, 0, 0),
     ["Option_Back_Transparency"] = 0.75,
 
-    ["Selected_Color"] = Color3.fromRGB(255, 0, 255)
+    ["Selected_Color"] = Color3.fromRGB(255, 50, 50)
 }
 
 local function GetNewYCoord()
@@ -321,6 +321,7 @@ c = UIS.InputBegan:Connect(function(input)
                         end
                         v["Selected"] = current
                         local col = v["Colors"][current][2]
+                        v["Drawings"]["Extra"]["Preview"].Color = col
                         v["CallBack"](col)
                         Reset()
                     end
@@ -362,6 +363,7 @@ c = UIS.InputBegan:Connect(function(input)
                         end
                         v["Selected"] = current
                         local col = v["Colors"][current][2]
+                        v["Drawings"]["Extra"]["Preview"].Color = col
                         v["CallBack"](col)
                         Reset()
                     end
