@@ -15,7 +15,7 @@ TestCategory:NewToggle("Toggle", false, function(bool) -- <string> name, <bool> 
 end)
 
 -- Slider
-TestCategory:NewSlider("Slider", 0.1, 0.1, 0, 1, 2, function(newvalue) -- <string> name, <num> default, <num> increment, <num> min, <num> max, <num> decimals, <func> CallBack
+TestCategory:NewSlider("Slider", 0.1, 0.1, 0, 1, 2, "m", function(newvalue) -- <string> name, <num> default, <num> increment, <num> min, <num> max, <num> decimals, <string> suffix, <func> CallBack
     print(newvalue) -- <number>
 end)
 
