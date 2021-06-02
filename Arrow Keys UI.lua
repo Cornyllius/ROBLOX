@@ -176,7 +176,7 @@ function Library:UpdateTheme()
     end
 end
 
-local Picker_Colors = {
+_G.Picker_Colors = {
     [1] = {"Red", RGB(255, 0, 0)},
     [2] = {"Orange", RGB(255, 136, 0)},
     [3] = {"Yellow", RGB(255, 255, 0)},
@@ -439,8 +439,8 @@ function Library:NewCategory(cat_name)
 
     function cat_funcs:NewColorpicker(op_name, default, CallBack)
         local current_op
-        for i = 1, #Picker_Colors do
-            local v = Picker_Colors[i]
+        for i = 1, #_G.Picker_Colors do
+            local v = _G.Picker_Colors[i]
             if v[1] == default then
                 current_op = i
             end
@@ -449,7 +449,7 @@ function Library:NewCategory(cat_name)
         local val = #_G["Layout"]+1
         local new_y = GetNewYCoord()
         _G["Layout"][val] = {
-            ["Colors"] = Picker_Colors,
+            ["Colors"] = _G.Picker_Colors,
             ["Type"] = "Colorpicker",
             ["Drawings"] = CreateTextBox(op_name, RGB(10, 10, 10), 0.75, RGB(255, 255, 255), 16, v2(110, new_y), "Colorpicker"),
             ["Selected"] = current_op,
@@ -477,6 +477,10 @@ function Library:Kill()
         if v["Type"] == "Toggle" or v["Type"] == "Slider" or v["Type"] == "Dropdown" then
             v["Drawings"]["Extra"]["Main"]:Remove()
             v["Drawings"]["Extra"]["Text"]:Remove()
+        elseif v["Type"] == "Colorpicker" then
+            v["Drawings"]["Extra"]["Main"]:Remove()
+            v["Drawings"]["Extra"]["Text"]:Remove()
+            v["Drawings"]["Extra"]["Preview"]:Remove()
         end
     end
     DESTROY_GUI = true
