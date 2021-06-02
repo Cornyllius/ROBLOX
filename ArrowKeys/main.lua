@@ -64,7 +64,7 @@ local function CreateTextBox(text, back_color, back_transparency, text_color, te
         local newpos = v2(b.Position.X + b.Size.X, b.Position.Y)
 
         local b2 = NewSquare(newpos, back_color, back_transparency)
-        local t2 = NewText(v2(0, 0), RGB(255, 255, 255), "< 0 >", text_size)
+        local t2 = NewText(v2(0, 0), RGB(255, 255, 255), "< 0"..info.Suffix.." >", text_size)
         t2.Center = true
 
         b2.Size = v2(t2.TextBounds.X+margin*4, t2.TextBounds.Y+margin*2)
@@ -241,7 +241,8 @@ function Library:PlaceUI()
             elseif v["Type"] == "Dropdown" then
                 t2.Text = "testtext"
             elseif v["Type"] == "Slider" then
-                t2.Text = "< 0 >"
+                local suff = v["Suffix"]
+                t2.Text = "< 0"..v["Suffix"].." >"
             end
 
             b2.Position = newpos
@@ -336,7 +337,7 @@ local function Reset()
                     v["Drawings"]["Extra"]["Text"].Text = "<off>"
                 end
             elseif v["Type"] == "Slider" then
-                v["Drawings"]["Extra"]["Text"].Text = "<"..v["VALUE"]..">"
+                v["Drawings"]["Extra"]["Text"].Text = "<"..v["VALUE"]..v["Suffix"]..">"
 
                 local newpos = v["Drawings"]["Extra"]["Main"].Position
                 local margin = 2
@@ -363,7 +364,7 @@ local function Reset()
                     v["Drawings"]["Extra"]["Text"].Text = "<off>"
                 end
             elseif v["Type"] == "Slider" then
-                v["Drawings"]["Extra"]["Text"].Text = "<"..v["VALUE"]..">"
+                v["Drawings"]["Extra"]["Text"].Text = "<"..v["VALUE"]..v["Suffix"]..">"
 
                 local newpos = v["Drawings"]["Extra"]["Main"].Position
                 local margin = 2
@@ -537,7 +538,8 @@ function Library:NewCategory(cat_name)
         Reset()
     end
 
-    function cat_funcs:NewSlider(op_name, default, increment, min, max, decimal_places, CallBack)
+    function cat_funcs:NewSlider(op_name, default, increment, min, max, decimal_places, suffix, CallBack)
+        local suff = suffix or ""
         local val = #_G["Layout"]+1
         local new_y = GetNewYCoord()
         _G["Layout"][val] = {
@@ -547,7 +549,8 @@ function Library:NewCategory(cat_name)
             ["Min"] = min,
             ["Max"] = max,
             ["Decimals"] = decimal_places,
-            ["Drawings"] = CreateTextBox(op_name, RGB(10, 10, 10), 0.75, RGB(255, 255, 255), _G["Theme"]["Text_Size"], v2(_G["Theme"]["UI_Position"].X+10, new_y), {Type = "Slider"}),
+            ["Suffix"] = suff,
+            ["Drawings"] = CreateTextBox(op_name, RGB(10, 10, 10), 0.75, RGB(255, 255, 255), _G["Theme"]["Text_Size"], v2(_G["Theme"]["UI_Position"].X+10, new_y), {Type = "Slider", Suffix = suff}),
             ["CallBack"] = CallBack
         }
         Reset()
