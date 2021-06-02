@@ -1,5 +1,7 @@
-if #_G["Layout"] > 0 then
-    return
+for i,v in pairs(_G) do
+    if tostring(i) == "Layout" and #v ~= 0 then
+        return
+    end
 end
 
 -- BASE FUNCTIONS
@@ -605,4 +607,4 @@ function Library:Kill()
     DESTROY_GUI = true
     _G["Layout"] = {}
 end
-return Library
+-- return Library
