@@ -126,15 +126,15 @@ _G["Theme"] = {
     ["UI_Position"] = v2(100, 100),
     ["Text_Size"] = 16,
 
-    ["Category_Text"] = Color3.fromRGB(255, 255, 255),
-    ["Category_Back"] = Color3.fromRGB(0, 0, 0),
+    ["Category_Text"] = RGB(255, 255, 255),
+    ["Category_Back"] = RGB(0, 0, 0),
     ["Category_Back_Transparency"] = 0.75,
 
-    ["Option_Text"] = Color3.fromRGB(255, 255, 255),
-    ["Option_Back"] = Color3.fromRGB(0, 0, 0),
+    ["Option_Text"] = RGB(255, 255, 255),
+    ["Option_Back"] = RGB(0, 0, 0),
     ["Option_Back_Transparency"] = 0.75,
 
-    ["Selected_Color"] = Color3.fromRGB(255, 50, 50)
+    ["Selected_Color"] = RGB(255, 50, 50)
 }
 
 local function GetNewYCoord()
@@ -607,4 +607,4 @@ function Library:Kill()
     DESTROY_GUI = true
     _G["Layout"] = {}
 end
--- return Library
+return Library
