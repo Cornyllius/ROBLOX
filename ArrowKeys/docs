@@ -1,1 +1,0 @@
-local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Blissful4992/ROBLOX/main/Arrow%20Keys%20UI.lua"))()
