@@ -35,7 +35,7 @@ Library:Toggle() -- Toggles UI <void>
 
 Enum.KeyCode.End -- Toggle Key (toggle) 
 
--- Theme (execute in SynX)
+-- Theme (execute in SynX) ; theme updates after either up/down/left/right arrows have been pressed
 _G["Theme"] = { 
     ["UI_Position"] = Vector2.new(100, 100),
     ["Text_Size"] = 16,
