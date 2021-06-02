@@ -32,6 +32,8 @@ end)
 -- Lib Functions
 Library:Kill() -- Removes UI <void>
 Library:Toggle() -- Toggles UI <void>
+Library:UpdateTheme() -- Updates UI Theme
+Library:PlaceUI() -- Places UI based on _G["Theme"]["UI_Position"] and _G["Theme"]["Text_Size"]
 
 Enum.KeyCode.End -- Toggle Key (toggle) 
 
