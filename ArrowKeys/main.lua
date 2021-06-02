@@ -54,7 +54,7 @@ local function CreateTextBox(text, back_color, back_transparency, text_color, te
         local newpos = v2(b.Position.X + b.Size.X, b.Position.Y)
 
         local b2 = NewSquare(newpos, back_color, back_transparency)
-        local t2 = NewText(v2(0, 0), RGB(255, 255, 255), "off", text_size)
+        local t2 = NewText(v2(0, 0), RGB(255, 255, 255), "<off>", text_size)
 
         b2.Size = v2(t2.TextBounds.X+margin*4, t2.TextBounds.Y+margin*2)
         t2.Position = v2(newpos.X+margin, newpos.Y+margin)
@@ -237,7 +237,7 @@ function Library:PlaceUI()
             local t2 = v["Drawings"]["Extra"]["Text"]
 
             if v["Type"] == "Toggle" then
-                t2.Text = "off"
+                t2.Text = "<off>"
             elseif v["Type"] == "Dropdown" then
                 t2.Text = "testtext"
             elseif v["Type"] == "Slider" then
@@ -331,9 +331,9 @@ local function Reset()
         if i == selected then
             if v["Type"] == "Toggle" then
                 if v["ENABLED"] == true then
-                    v["Drawings"]["Extra"]["Text"].Text = "on"
+                    v["Drawings"]["Extra"]["Text"].Text = "<on>"
                 else 
-                    v["Drawings"]["Extra"]["Text"].Text = "off"
+                    v["Drawings"]["Extra"]["Text"].Text = "<off>"
                 end
             elseif v["Type"] == "Slider" then
                 v["Drawings"]["Extra"]["Text"].Text = "<"..v["VALUE"]..">"
@@ -358,9 +358,9 @@ local function Reset()
         else 
             if v["Type"] == "Toggle" then
                 if v["ENABLED"] == true then
-                    v["Drawings"]["Extra"]["Text"].Text = "on"
+                    v["Drawings"]["Extra"]["Text"].Text = "<on>"
                 else 
-                    v["Drawings"]["Extra"]["Text"].Text = "off"
+                    v["Drawings"]["Extra"]["Text"].Text = "<off>"
                 end
             elseif v["Type"] == "Slider" then
                 v["Drawings"]["Extra"]["Text"].Text = "<"..v["VALUE"]..">"
