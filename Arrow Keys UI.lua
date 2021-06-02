@@ -228,9 +228,6 @@ local function Reset()
                 local t2 = v["Drawings"]["Extra"]["Text"]
                 b2.Size = v2(t2.TextBounds.X+margin*4, t2.TextBounds.Y+margin*2)
                 t2.Position = v2(newpos.X+margin+t2.TextBounds.X/2, newpos.Y+margin)
-            elseif v["Type"] == "Colorpicker" then
-                local current = v["Selected"]
-                v["Drawings"]["Extra"]["Preview"].Color = v["Colors"][current][2]
             end
         else 
             if v["Type"] == "Toggle" then
@@ -258,9 +255,6 @@ local function Reset()
                 local t2 = v["Drawings"]["Extra"]["Text"]
                 b2.Size = v2(t2.TextBounds.X+margin*4, t2.TextBounds.Y+margin*2)
                 t2.Position = v2(newpos.X+margin+t2.TextBounds.X/2, newpos.Y+margin)
-            elseif v["Type"] == "Colorpicker" then
-                local current = v["Selected"]
-                v["Drawings"]["Extra"]["Preview"].Color = v["Colors"][current][2]
             end
         end
     end
