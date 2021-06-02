@@ -35,7 +35,7 @@ local function NewText(position, color, text, text_size)
     return t
 end
 
-local function CreateTextBox(text, back_color, back_transparency, text_color, text_size, pos, type)
+local function CreateTextBox(text, back_color, back_transparency, text_color, text_size, pos, info)
 
     local b = NewSquare(pos, back_color, back_transparency)
     local t = NewText(v2(0, 0), text_color, text, text_size)
@@ -44,7 +44,7 @@ local function CreateTextBox(text, back_color, back_transparency, text_color, te
     b.Size = v2(t.TextBounds.X+margin*4, t.TextBounds.Y+margin*2)
     t.Position = v2(pos.X+margin*2, pos.Y+margin)
 
-    if type == "Toggle" then
+    if info.Type == "Toggle" then
         local newpos = v2(b.Position.X + b.Size.X, b.Position.Y)
 
         local b2 = NewSquare(newpos, back_color, back_transparency)
@@ -54,7 +54,7 @@ local function CreateTextBox(text, back_color, back_transparency, text_color, te
         t2.Position = v2(newpos.X+margin, newpos.Y+margin)
 
         return {["Main"] = b, ["Text"] = t, ["Extra"] = {["Main"] = b2, ["Text"] = t2}}
-    elseif type == "Slider" then
+    elseif info.Type == "Slider" then
         local newpos = v2(b.Position.X + b.Size.X, b.Position.Y)
 
         local b2 = NewSquare(newpos, back_color, back_transparency)
@@ -65,7 +65,7 @@ local function CreateTextBox(text, back_color, back_transparency, text_color, te
         t2.Position = v2(newpos.X+margin+t2.TextBounds.X/2, newpos.Y+margin)
 
         return {["Main"] = b, ["Text"] = t, ["Extra"] = {["Main"] = b2, ["Text"] = t2}}
-    elseif type == "Dropdown" then
+    elseif info.Type == "Dropdown" then
         local newpos = v2(b.Position.X + b.Size.X, b.Position.Y)
 
         local b2 = NewSquare(newpos, back_color, back_transparency)
@@ -76,13 +76,14 @@ local function CreateTextBox(text, back_color, back_transparency, text_color, te
         t2.Position = v2(newpos.X+margin+t2.TextBounds.X/2, newpos.Y+margin)
 
         return {["Main"] = b, ["Text"] = t, ["Extra"] = {["Main"] = b2, ["Text"] = t2}}
-    elseif type == "Colorpicker" then
+    elseif info.Type == "Colorpicker" then
         local newpos = v2(b.Position.X + b.Size.X, b.Position.Y)
 
         local b2 = NewSquare(newpos, back_color, back_transparency)
         local t2 = NewText(v2(0, 0), RGB(255, 255, 255), "<   >", text_size)
         local p2 = NewSquare(newpos, RGB(0,0,0), 1)
         p2.Size = v2(9, 9)
+        p2.Color = info.Color
 
         t2.Center = true
 
@@ -115,7 +116,10 @@ local DESTROY_GUI = false
 
 _G["Layout"] = {}
 
-_G["Theme"] = {
+_G["Theme"] = { 
+    ["UI_Position"] = v2(100, 100),
+    ["Text_Size"] = 16,
+
     ["Category_Text"] = Color3.fromRGB(255, 255, 255),
     ["Category_Back"] = Color3.fromRGB(0, 0, 0),
     ["Category_Back_Transparency"] = 0.75,
@@ -128,7 +132,7 @@ _G["Theme"] = {
 }
 
 local function GetNewYCoord()
-    local y = 100
+    local y = _G["Theme"]["UI_Position"].Y
     for i,v in pairs(_G["Layout"]) do
         y = y + v["Drawings"]["Main"].Size.Y
     end
@@ -147,14 +151,17 @@ function Library:UpdateTheme()
                 v["Drawings"]["Main"].Color = _G["Theme"]["Category_Back"]
                 v["Drawings"]["Main"].Transparency = _G["Theme"]["Category_Back_Transparency"]
                 v["Drawings"]["Text"].Color = _G["Theme"]["Selected_Color"]
+                v["Drawings"]["Text"].Size = _G["Theme"]["Text_Size"]
             else
                 v["Drawings"]["Main"].Color = _G["Theme"]["Option_Back"]
                 v["Drawings"]["Main"].Transparency = _G["Theme"]["Option_Back_Transparency"]
                 v["Drawings"]["Text"].Color = _G["Theme"]["Selected_Color"]
+                v["Drawings"]["Text"].Size = _G["Theme"]["Text_Size"]
                 if v["Type"] == "Toggle" or v["Type"] == "Slider" or v["Type"] == "Dropdown" or v["Type"] == "Colorpicker" then
                     v["Drawings"]["Extra"]["Main"].Color = _G["Theme"]["Option_Back"]
                     v["Drawings"]["Extra"]["Main"].Transparency = _G["Theme"]["Option_Back_Transparency"]
                     v["Drawings"]["Extra"]["Text"].Color = _G["Theme"]["Selected_Color"]
+                    v["Drawings"]["Extra"]["Text"].Size = _G["Theme"]["Text_Size"]
                 end
             end
         else
@@ -162,43 +169,156 @@ function Library:UpdateTheme()
                 v["Drawings"]["Main"].Color = _G["Theme"]["Category_Back"]
                 v["Drawings"]["Main"].Transparency = _G["Theme"]["Category_Back_Transparency"]
                 v["Drawings"]["Text"].Color = _G["Theme"]["Category_Text"]
+                v["Drawings"]["Text"].Size = _G["Theme"]["Text_Size"]
             else
                 v["Drawings"]["Main"].Color = _G["Theme"]["Option_Back"]
                 v["Drawings"]["Main"].Transparency = _G["Theme"]["Option_Back_Transparency"]
                 v["Drawings"]["Text"].Color = _G["Theme"]["Option_Text"]
+                v["Drawings"]["Text"].Size = _G["Theme"]["Text_Size"]
                 if v["Type"] == "Toggle" or v["Type"] == "Slider" or v["Type"] == "Dropdown" or v["Type"] == "Colorpicker" then
                     v["Drawings"]["Extra"]["Main"].Color = _G["Theme"]["Option_Back"]
                     v["Drawings"]["Extra"]["Main"].Transparency = _G["Theme"]["Option_Back_Transparency"]
                     v["Drawings"]["Extra"]["Text"].Color = _G["Theme"]["Option_Text"]
+                    v["Drawings"]["Extra"]["Text"].Size = _G["Theme"]["Text_Size"]
                 end
             end
         end
     end
 end
 
+local active = true
+function Library:Toggle()
+    active = not active
+    for i = 1, #_G["Layout"] do
+        local v = _G["Layout"][i]
+        if v["Type"] == "Category" then
+            v["Drawings"]["Main"].Visible = active
+            v["Drawings"]["Text"].Visible = active
+        else
+            v["Drawings"]["Main"].Visible = active
+            v["Drawings"]["Text"].Visible = active
+            if v["Type"] == "Toggle" or v["Type"] == "Slider" or v["Type"] == "Dropdown" then
+                v["Drawings"]["Extra"]["Main"].Visible = active
+                v["Drawings"]["Extra"]["Text"].Visible = active
+            elseif v["Type"] == "Colorpicker" then
+                v["Drawings"]["Extra"]["Main"].Visible = active
+                v["Drawings"]["Extra"]["Text"].Visible = active
+                v["Drawings"]["Extra"]["Preview"].Visible = active
+            end
+        end
+    end
+end
+
+function Library:PlaceUI()
+    local current_y = _G["Theme"]["UI_Position"].Y
+    for i = 1, #_G["Layout"] do
+        local v = _G["Layout"][i]
+        if v["Type"] == "Toggle" or v["Type"] == "Slider" or v["Type"] == "Dropdown" then
+            local pos = v2(_G["Theme"]["UI_Position"].X+10, current_y)
+
+            local b = v["Drawings"]["Main"]
+            local t = v["Drawings"]["Text"]
+
+            local margin = 2
+
+            b.Position = pos
+            b.Size = v2(t.TextBounds.X+margin*4, t.TextBounds.Y+margin*2)
+            t.Position = v2(pos.X+margin*2, pos.Y+margin)
+
+            local newpos = v2(b.Position.X + b.Size.X, b.Position.Y)
+
+            local b2 = v["Drawings"]["Extra"]["Main"]
+            local t2 = v["Drawings"]["Extra"]["Text"]
+
+            if v["Type"] == "Toggle" then
+                t2.Text = "off"
+            elseif v["Type"] == "Dropdown" then
+                t2.Text = "testtext"
+            elseif v["Type"] == "Slider" then
+                t2.Text = "< 0 >"
+            end
+
+            b2.Position = newpos
+            t2.Center = true
+
+            b2.Size = v2(t2.TextBounds.X+margin*4, t2.TextBounds.Y+margin*2)
+            t2.Position = v2(newpos.X+margin+t2.TextBounds.X/2, newpos.Y+margin)
+        elseif v["Type"] == "Category" then
+            local pos = v2(_G["Theme"]["UI_Position"].X, current_y)
+
+            local b = v["Drawings"]["Main"]
+            local t = v["Drawings"]["Text"]
+
+            local margin = 2
+
+            b.Position = pos
+            b.Size = v2(t.TextBounds.X+margin*4, t.TextBounds.Y+margin*2)
+            t.Position = v2(pos.X+margin*2, pos.Y+margin)
+        elseif v["Type"] == "Label" or v["Type"] == "Button" then
+            local pos = v2(_G["Theme"]["UI_Position"].X+10, current_y)
+
+            local b = v["Drawings"]["Main"]
+            local t = v["Drawings"]["Text"]
+
+            local margin = 2
+
+            b.Position = pos
+            b.Size = v2(t.TextBounds.X+margin*4, t.TextBounds.Y+margin*2)
+            t.Position = v2(pos.X+margin*2, pos.Y+margin)
+        elseif v["Type"] == "Colorpicker" then
+            local pos = v2(_G["Theme"]["UI_Position"].X+10, current_y)
+
+            local b = v["Drawings"]["Main"]
+            local t = v["Drawings"]["Text"]
+
+            local margin = 2
+            b.Position = pos
+            b.Size = v2(t.TextBounds.X+margin*4, t.TextBounds.Y+margin*2)
+            t.Position = v2(pos.X+margin*2, pos.Y+margin)
+
+            local newpos = v2(b.Position.X + b.Size.X, b.Position.Y)
+
+            local b2 = v["Drawings"]["Extra"]["Main"]
+            local t2 = v["Drawings"]["Extra"]["Text"]
+            local p2 = v["Drawings"]["Extra"]["Preview"]
+
+            t2.Text = "<   >"
+            t2.Center = true
+
+            b2.Position = newpos
+            b2.Size = v2(t2.TextBounds.X+margin*4, t2.TextBounds.Y+margin*2)
+            t2.Position = v2(newpos.X+margin+t2.TextBounds.X/2, newpos.Y+margin)
+
+            p2.Position = v2(t2.Position.X-p2.Size.X/2, b2.Position.Y+b2.Size.Y/2-p2.Size.Y/2)
+        end
+        current_y = current_y + v["Drawings"]["Main"].Size.Y
+    end
+end
+
 _G.Picker_Colors = {
-    [1] = {"Red", RGB(255, 0, 0)},
-    [2] = {"Orange", RGB(255, 136, 0)},
-    [3] = {"Yellow", RGB(255, 255, 0)},
-    [4] = {"Lime", RGB(160, 255, 0)},
-    [5] = {"Green", RGB(0, 255, 0)},
-    [6] = {"Teal", RGB(0, 255, 195)},
-    [7] = {"Aqua", RGB(0, 213, 255)},
-    [8] = {"Blue", RGB(0, 145, 255)},
-    [9] = {"Dark Blue", RGB(0, 60, 255)},
-    [10] = {"Purple", RGB(102, 0, 255)},
-    [11] = {"Magenta", RGB(162, 0, 255)},
-    [12] = {"Pink", RGB(221, 0, 255)},
-    [13] = {"Hot Pink", RGB(255, 0, 128)},
-    [14] = {"White", RGB(255, 255, 255)},
-    [15] = {"Light Gray", RGB(165, 165, 165)},
-    [16] = {"Gray", RGB(107, 107, 107)},
-    [17] = {"Dark Gray", RGB(61, 61, 61)},
-    [18] = {"Black", RGB(0, 0, 0)}
+    [1] = RGB(255, 0, 0),
+    [2] = RGB(255, 136, 0),
+    [3] = RGB(255, 255, 0),
+    [4] = RGB(160, 255, 0),
+    [5] = RGB(0, 255, 0),
+    [6] = RGB(0, 255, 195),
+    [7] = RGB(0, 213, 255),
+    [8] = RGB(0, 145, 255),
+    [9] = RGB(0, 60, 255),
+    [10] = RGB(102, 0, 255),
+    [11] = RGB(162, 0, 255),
+    [12] = RGB(221, 0, 255),
+    [13] = RGB(255, 0, 128),
+    [14] = RGB(255, 255, 255),
+    [15] = RGB(165, 165, 165),
+    [16] = RGB(107, 107, 107),
+    [17] = RGB(61, 61, 61),
+    [18] = RGB(0, 0, 0)
 }
 
 local function Reset()
     Library:UpdateTheme()
+    Library:PlaceUI()
     n = #_G["Layout"]
     for i = 1, n do
         local v = _G["Layout"][i]
@@ -314,7 +434,7 @@ c = UIS.InputBegan:Connect(function(input)
                             current = 1
                         end
                         v["Selected"] = current
-                        local col = v["Colors"][current][2]
+                        local col = v["Colors"][current]
                         v["Drawings"]["Extra"]["Preview"].Color = col
                         v["CallBack"](col)
                         Reset()
@@ -356,13 +476,16 @@ c = UIS.InputBegan:Connect(function(input)
                             current = n
                         end
                         v["Selected"] = current
-                        local col = v["Colors"][current][2]
+                        local col = v["Colors"][current]
                         v["Drawings"]["Extra"]["Preview"].Color = col
                         v["CallBack"](col)
                         Reset()
                     end
                 end
             end
+        end
+        if input.KeyCode == Enum.KeyCode.End then
+            Library:Toggle()
         end
     end
 end)
@@ -379,7 +502,7 @@ function Library:NewCategory(cat_name)
     local new_y = GetNewYCoord()
     _G["Layout"][val] = {
         ["Type"] = "Category",
-        ["Drawings"] = CreateTextBox(cat_name, RGB(10, 10, 10), 0.75, RGB(255, 255, 255), 16, v2(100, new_y), "Category")
+        ["Drawings"] = CreateTextBox(cat_name, RGB(10, 10, 10), 0.75, RGB(255, 255, 255), _G["Theme"]["Text_Size"], v2(_G["Theme"]["UI_Position"].X, new_y), {Type = "Category"})
     }
     Reset()
 
@@ -390,7 +513,7 @@ function Library:NewCategory(cat_name)
         local new_y = GetNewYCoord()
         _G["Layout"][val] = {
             ["Type"] = "Button",
-            ["Drawings"] = CreateTextBox(op_name, RGB(10, 10, 10), 0.75, RGB(255, 255, 255), 16, v2(110, new_y), "Button"),
+            ["Drawings"] = CreateTextBox(op_name, RGB(10, 10, 10), 0.75, RGB(255, 255, 255), _G["Theme"]["Text_Size"], v2(_G["Theme"]["UI_Position"].X+10, new_y), {Type = "Button"}),
             ["CallBack"] = CallBack
         }
         Reset()
@@ -402,7 +525,7 @@ function Library:NewCategory(cat_name)
         _G["Layout"][val] = {
             ["ENABLED"] = default,
             ["Type"] = "Toggle",
-            ["Drawings"] = CreateTextBox(op_name, RGB(10, 10, 10), 0.75, RGB(255, 255, 255), 16, v2(110, new_y), "Toggle"),
+            ["Drawings"] = CreateTextBox(op_name, RGB(10, 10, 10), 0.75, RGB(255, 255, 255), _G["Theme"]["Text_Size"], v2(_G["Theme"]["UI_Position"].X+10, new_y), {Type = "Toggle"}),
             ["CallBack"] = CallBack
         }
         Reset()
@@ -418,7 +541,7 @@ function Library:NewCategory(cat_name)
             ["Min"] = min,
             ["Max"] = max,
             ["Decimals"] = decimal_places,
-            ["Drawings"] = CreateTextBox(op_name, RGB(10, 10, 10), 0.75, RGB(255, 255, 255), 16, v2(110, new_y), "Slider"),
+            ["Drawings"] = CreateTextBox(op_name, RGB(10, 10, 10), 0.75, RGB(255, 255, 255), _G["Theme"]["Text_Size"], v2(_G["Theme"]["UI_Position"].X+10, new_y), {Type = "Slider"}),
             ["CallBack"] = CallBack
         }
         Reset()
@@ -430,7 +553,7 @@ function Library:NewCategory(cat_name)
         _G["Layout"][val] = {
             ["OPTIONS"] = options,
             ["Type"] = "Dropdown",
-            ["Drawings"] = CreateTextBox(op_name, RGB(10, 10, 10), 0.75, RGB(255, 255, 255), 16, v2(110, new_y), "Dropdown"),
+            ["Drawings"] = CreateTextBox(op_name, RGB(10, 10, 10), 0.75, RGB(255, 255, 255), _G["Theme"]["Text_Size"], v2(_G["Theme"]["UI_Position"].X+10, new_y), {Type = "Dropdown"}),
             ["Selected"] = default,
             ["CallBack"] = CallBack
         }
@@ -438,21 +561,13 @@ function Library:NewCategory(cat_name)
     end
 
     function cat_funcs:NewColorpicker(op_name, default, CallBack)
-        local current_op
-        for i = 1, #_G.Picker_Colors do
-            local v = _G.Picker_Colors[i]
-            if v[1] == default then
-                current_op = i
-            end
-        end
-
         local val = #_G["Layout"]+1
         local new_y = GetNewYCoord()
         _G["Layout"][val] = {
             ["Colors"] = _G.Picker_Colors,
             ["Type"] = "Colorpicker",
-            ["Drawings"] = CreateTextBox(op_name, RGB(10, 10, 10), 0.75, RGB(255, 255, 255), 16, v2(110, new_y), "Colorpicker"),
-            ["Selected"] = current_op,
+            ["Drawings"] = CreateTextBox(op_name, RGB(10, 10, 10), 0.75, RGB(255, 255, 255), _G["Theme"]["Text_Size"], v2(_G["Theme"]["UI_Position"].X+10, new_y), {Type = "Colorpicker", Color = default}),
+            ["Selected"] = 1,
             ["CallBack"] = CallBack
         }
         Reset()
@@ -463,7 +578,7 @@ function Library:NewCategory(cat_name)
         local new_y = GetNewYCoord()
         _G["Layout"][val] = {
             ["Type"] = "Label",
-            ["Drawings"] = CreateTextBox(op_name, RGB(10, 10, 10), 0.75, RGB(255, 255, 255), 16, v2(110, new_y), "Label")
+            ["Drawings"] = CreateTextBox(op_name, RGB(10, 10, 10), 0.75, RGB(255, 255, 255), _G["Theme"]["Text_Size"], v2(_G["Theme"]["UI_Position"].X+10, new_y), {Type = "Label"})
         }
         Reset()
     end
