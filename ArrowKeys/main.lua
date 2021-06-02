@@ -1,3 +1,7 @@
+if #_G["Layout"] > 0 then
+    return
+end
+
 -- BASE FUNCTIONS
 local v2 = Vector2.new
 local u2 = UDim2.new
