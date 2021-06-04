@@ -323,7 +323,7 @@ _G.Picker_Colors = {
     [18] = RGB(0, 0, 0)
 }
 
-local function Reset()
+function Library:Reset()
     Library:UpdateTheme()
     Library:PlaceUI()
     n = #_G["Layout"]
@@ -387,18 +387,18 @@ local function Reset()
     end
 end
 
-Reset()
+Library:Reset()
 local UIS = game:GetService("UserInputService")
 local c
 c = UIS.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.Keyboard then
         if input.KeyCode == Enum.KeyCode.Down then
             selected = clamp(selected + 1, 1, n)
-            Reset()
+            Library:Reset()
         end
         if input.KeyCode == Enum.KeyCode.Up then
             selected = clamp(selected - 1, 1, n)
-            Reset()
+            Library:Reset()
         end
         if input.KeyCode == Enum.KeyCode.Right then
             n = #_G["Layout"]
@@ -407,7 +407,7 @@ c = UIS.InputBegan:Connect(function(input)
                 if i == selected then
                     if v["Type"] == "Button" then
                         v["CallBack"]()
-                        Reset()
+                        Library:Reset()
                     elseif v["Type"] == "Slider" then
                         local str = "1"
                         for i = 1, v["Decimals"] do 
@@ -416,11 +416,11 @@ c = UIS.InputBegan:Connect(function(input)
                         local newval = clamp(floor((v["VALUE"] + v["Increment"])* tonumber(str))/tonumber(str), v["Min"], v["Max"])
                         v["VALUE"] = newval
                         v["CallBack"](newval)
-                        Reset()
+                        Library:Reset()
                     elseif v["Type"] == "Toggle" then
                         v["ENABLED"] = not v["ENABLED"]
                         v["CallBack"](v["ENABLED"])
-                        Reset()
+                        Library:Reset()
                     elseif v["Type"] == "Dropdown" then
                         local n = #v["OPTIONS"]
                         local current = v["Selected"]
@@ -431,7 +431,7 @@ c = UIS.InputBegan:Connect(function(input)
                         end
                         v["Selected"] = current
                         v["CallBack"](v["OPTIONS"][current])
-                        Reset()
+                        Library:Reset()
                     elseif v["Type"] == "Colorpicker" then
                         local n = #v["Colors"]
                         local current = v["Selected"]
@@ -444,7 +444,7 @@ c = UIS.InputBegan:Connect(function(input)
                         local col = v["Colors"][current]
                         v["Drawings"]["Extra"]["Preview"].Color = col
                         v["CallBack"](col)
-                        Reset()
+                        Library:Reset()
                     end
                 end
             end
@@ -457,7 +457,7 @@ c = UIS.InputBegan:Connect(function(input)
                     if v["Type"] == "Toggle" then
                         v["ENABLED"] = not v["ENABLED"]
                         v["CallBack"](v["ENABLED"])
-                        Reset()
+                        Library:Reset()
                     elseif v["Type"] == "Slider" then
                         local str = "1"
                         for i = 1, v["Decimals"] do 
@@ -466,7 +466,7 @@ c = UIS.InputBegan:Connect(function(input)
                         local newval = clamp(floor((v["VALUE"] - v["Increment"])* tonumber(str))/tonumber(str), v["Min"], v["Max"])
                         v["VALUE"] = newval
                         v["CallBack"](newval)
-                        Reset()
+                        Library:Reset()
                     elseif v["Type"] == "Dropdown" then
                         local n = #v["OPTIONS"]
                         local current = v["Selected"]
@@ -477,7 +477,7 @@ c = UIS.InputBegan:Connect(function(input)
                         end
                         v["Selected"] = current
                         v["CallBack"](v["OPTIONS"][current])
-                        Reset()
+                        Library:Reset()
                     elseif v["Type"] == "Colorpicker" then
                         local n = #v["Colors"]
                         local current = v["Selected"]
@@ -490,7 +490,7 @@ c = UIS.InputBegan:Connect(function(input)
                         local col = v["Colors"][current]
                         v["Drawings"]["Extra"]["Preview"].Color = col
                         v["CallBack"](col)
-                        Reset()
+                        Library:Reset()
                     end
                 end
             end
@@ -515,7 +515,7 @@ function Library:NewCategory(cat_name)
         ["Type"] = "Category",
         ["Drawings"] = CreateTextBox(cat_name, RGB(10, 10, 10), 0.75, RGB(255, 255, 255), _G["Theme"]["Text_Size"], v2(_G["Theme"]["UI_Position"].X, new_y), {Type = "Category"})
     }
-    Reset()
+    Library:Reset()
 
     local cat_funcs = {}
 
@@ -527,7 +527,7 @@ function Library:NewCategory(cat_name)
             ["Drawings"] = CreateTextBox(op_name, RGB(10, 10, 10), 0.75, RGB(255, 255, 255), _G["Theme"]["Text_Size"], v2(_G["Theme"]["UI_Position"].X+10, new_y), {Type = "Button"}),
             ["CallBack"] = CallBack
         }
-        Reset()
+        Library:Reset()
     end
 
     function cat_funcs:NewToggle(op_name, default, CallBack)
@@ -539,7 +539,7 @@ function Library:NewCategory(cat_name)
             ["Drawings"] = CreateTextBox(op_name, RGB(10, 10, 10), 0.75, RGB(255, 255, 255), _G["Theme"]["Text_Size"], v2(_G["Theme"]["UI_Position"].X+10, new_y), {Type = "Toggle"}),
             ["CallBack"] = CallBack
         }
-        Reset()
+        Library:Reset()
     end
 
     function cat_funcs:NewSlider(op_name, default, increment, min, max, decimal_places, suffix, CallBack)
@@ -557,7 +557,7 @@ function Library:NewCategory(cat_name)
             ["Drawings"] = CreateTextBox(op_name, RGB(10, 10, 10), 0.75, RGB(255, 255, 255), _G["Theme"]["Text_Size"], v2(_G["Theme"]["UI_Position"].X+10, new_y), {Type = "Slider", Suffix = suff}),
             ["CallBack"] = CallBack
         }
-        Reset()
+        Library:Reset()
     end
 
     function cat_funcs:NewDropdown(op_name, options, default, CallBack)
@@ -570,7 +570,7 @@ function Library:NewCategory(cat_name)
             ["Selected"] = default,
             ["CallBack"] = CallBack
         }
-        Reset()
+        Library:Reset()
     end
 
     function cat_funcs:NewColorpicker(op_name, default, CallBack)
@@ -583,7 +583,7 @@ function Library:NewCategory(cat_name)
             ["Selected"] = 1,
             ["CallBack"] = CallBack
         }
-        Reset()
+        Library:Reset()
     end
 
     function cat_funcs:NewLabel(op_name)
@@ -593,7 +593,7 @@ function Library:NewCategory(cat_name)
             ["Type"] = "Label",
             ["Drawings"] = CreateTextBox(op_name, RGB(10, 10, 10), 0.75, RGB(255, 255, 255), _G["Theme"]["Text_Size"], v2(_G["Theme"]["UI_Position"].X+10, new_y), {Type = "Label"})
         }
-        Reset()
+        Library:Reset()
     end
     return cat_funcs
 end
