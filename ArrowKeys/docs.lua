@@ -29,6 +29,9 @@ TestCategory:NewColorpicker("Color", Color3.fromRGB(255, 255, 255), function(col
     print(col) -- <color3>
 end)
 
+-- Label
+TestCategory:NewLabel("I like cheese") -- <string> text
+
 -- Lib Functions
 Library:Kill() -- Removes UI <void>
 Library:Toggle() -- Toggles UI <void>
