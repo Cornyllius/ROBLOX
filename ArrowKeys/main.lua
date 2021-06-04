@@ -454,7 +454,11 @@ c = UIS.InputBegan:Connect(function(input)
             for i = 1, n do
                 local v = _G["Layout"][i]
                 if i == selected then
-                    if v["Type"] == "Slider" then
+                    if v["Type"] == "Toggle" then
+                        v["ENABLED"] = not v["ENABLED"]
+                        v["CallBack"](v["ENABLED"])
+                        Reset()
+                    elseif v["Type"] == "Slider" then
                         local str = "1"
                         for i = 1, v["Decimals"] do 
                             str = str.."0"
@@ -610,4 +614,4 @@ function Library:Kill()
     DESTROY_GUI = true
     _G["Layout"] = {}
 end
-return Library
+-- return Library
