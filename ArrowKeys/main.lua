@@ -413,7 +413,7 @@ c = UIS.InputBegan:Connect(function(input)
                         for i = 1, v["Decimals"] do 
                             str = str.."0"
                         end
-                        local newval = clamp(((v["VALUE"] + v["Increment"])* tonumber(str))/tonumber(str), v["Min"], v["Max"])
+                        local newval = clamp(round((v["VALUE"] + v["Increment"])* tonumber(str))/tonumber(str), v["Min"], v["Max"])
                         v["VALUE"] = newval
                         v["CallBack"](newval)
                         print(newval)
@@ -464,10 +464,9 @@ c = UIS.InputBegan:Connect(function(input)
                         for i = 1, v["Decimals"] do 
                             str = str.."0"
                         end
-                        local newval = clamp(((v["VALUE"] - v["Increment"])* tonumber(str))/tonumber(str), v["Min"], v["Max"])
+                        local newval = clamp(round((v["VALUE"] - v["Increment"])* tonumber(str))/tonumber(str), v["Min"], v["Max"])
                         v["VALUE"] = newval
                         v["CallBack"](newval)
-                        print(newval)
                         Library:Reset()
                     elseif v["Type"] == "Dropdown" then
                         local n = #v["OPTIONS"]
