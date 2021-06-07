@@ -416,7 +416,6 @@ c = UIS.InputBegan:Connect(function(input)
                         local newval = clamp(round((v["VALUE"] + v["Increment"])* tonumber(str))/tonumber(str), v["Min"], v["Max"])
                         v["VALUE"] = newval
                         v["CallBack"](newval)
-                        print(newval)
                         Library:Reset()
                     elseif v["Type"] == "Toggle" then
                         v["ENABLED"] = not v["ENABLED"]
