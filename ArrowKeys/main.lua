@@ -667,7 +667,7 @@ function Library:Kill()
     for i, v in pairs(_G["Layout"]) do
         v["Drawings"]["Main"]:Remove()
         v["Drawings"]["Text"]:Remove()
-        if v["Type"] == "Toggle" or v["Type"] == "Slider" or v["Type"] == "Dropdown" then
+        if v["Type"] == "Toggle" or v["Type"] == "Slider" or v["Type"] == "Dropdown" or v["Type"] == "Keybind" then
             v["Drawings"]["Extra"]["Main"]:Remove()
             v["Drawings"]["Extra"]["Text"]:Remove()
         elseif v["Type"] == "Colorpicker" then
