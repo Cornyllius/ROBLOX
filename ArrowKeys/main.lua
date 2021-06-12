@@ -99,6 +99,17 @@ local function CreateTextBox(text, back_color, back_transparency, text_color, te
         p2.Position = v2(t2.Position.X-p2.Size.X/2, b2.Position.Y+b2.Size.Y/2-p2.Size.Y/2)
 
         return {["Main"] = b, ["Text"] = t, ["Extra"] = {["Main"] = b2, ["Text"] = t2, ["Preview"] = p2}}
+    elseif info.Type == "Keybind" then
+        local newpos = v2(b.Position.X + b.Size.X, b.Position.Y)
+
+        local b2 = NewSquare(newpos, back_color, back_transparency)
+        local t2 = NewText(v2(0, 0), RGB(255, 255, 255), "Home", text_size)
+        t2.Center = true
+
+        b2.Size = v2(t2.TextBounds.X+margin*4, t2.TextBounds.Y+margin*2)
+        t2.Position = v2(newpos.X+margin+t2.TextBounds.X/2, newpos.Y+margin)
+
+        return {["Main"] = b, ["Text"] = t, ["Extra"] = {["Main"] = b2, ["Text"] = t2}}
     end
 
     return {["Main"] = b, ["Text"] = t}
@@ -163,7 +174,7 @@ function Library:UpdateTheme()
                 v["Drawings"]["Main"].Transparency = _G["Theme"]["Option_Back_Transparency"]
                 v["Drawings"]["Text"].Color = _G["Theme"]["Selected_Color"]
                 v["Drawings"]["Text"].Size = _G["Theme"]["Text_Size"]
-                if v["Type"] == "Toggle" or v["Type"] == "Slider" or v["Type"] == "Dropdown" or v["Type"] == "Colorpicker" then
+                if v["Type"] == "Toggle" or v["Type"] == "Slider" or v["Type"] == "Dropdown" or v["Type"] == "Colorpicker" or v["Type"] == "Keybind" then
                     v["Drawings"]["Extra"]["Main"].Color = _G["Theme"]["Option_Back"]
                     v["Drawings"]["Extra"]["Main"].Transparency = _G["Theme"]["Option_Back_Transparency"]
                     v["Drawings"]["Extra"]["Text"].Color = _G["Theme"]["Selected_Color"]
@@ -181,7 +192,7 @@ function Library:UpdateTheme()
                 v["Drawings"]["Main"].Transparency = _G["Theme"]["Option_Back_Transparency"]
                 v["Drawings"]["Text"].Color = _G["Theme"]["Option_Text"]
                 v["Drawings"]["Text"].Size = _G["Theme"]["Text_Size"]
-                if v["Type"] == "Toggle" or v["Type"] == "Slider" or v["Type"] == "Dropdown" or v["Type"] == "Colorpicker" then
+                if v["Type"] == "Toggle" or v["Type"] == "Slider" or v["Type"] == "Dropdown" or v["Type"] == "Colorpicker" or v["Type"] == "Keybind" then
                     v["Drawings"]["Extra"]["Main"].Color = _G["Theme"]["Option_Back"]
                     v["Drawings"]["Extra"]["Main"].Transparency = _G["Theme"]["Option_Back_Transparency"]
                     v["Drawings"]["Extra"]["Text"].Color = _G["Theme"]["Option_Text"]
@@ -203,7 +214,7 @@ function Library:Toggle()
         else
             v["Drawings"]["Main"].Visible = active
             v["Drawings"]["Text"].Visible = active
-            if v["Type"] == "Toggle" or v["Type"] == "Slider" or v["Type"] == "Dropdown" then
+            if v["Type"] == "Toggle" or v["Type"] == "Slider" or v["Type"] == "Dropdown" or v["Type"] == "Keybind" then
                 v["Drawings"]["Extra"]["Main"].Visible = active
                 v["Drawings"]["Extra"]["Text"].Visible = active
             elseif v["Type"] == "Colorpicker" then
@@ -219,7 +230,7 @@ function Library:PlaceUI()
     local current_y = _G["Theme"]["UI_Position"].Y
     for i = 1, #_G["Layout"] do
         local v = _G["Layout"][i]
-        if v["Type"] == "Toggle" or v["Type"] == "Slider" or v["Type"] == "Dropdown" then
+        if v["Type"] == "Toggle" or v["Type"] == "Slider" or v["Type"] == "Dropdown" or v["Type"] == "Keybind" then
             local pos = v2(_G["Theme"]["UI_Position"].X+10, current_y)
 
             local b = v["Drawings"]["Main"]
@@ -243,6 +254,8 @@ function Library:PlaceUI()
             elseif v["Type"] == "Slider" then
                 local suff = v["Suffix"]
                 t2.Text = "< 0"..v["Suffix"].." >"
+            elseif v["Type"] == "Keybind" then
+                t2.Text = "Home"
             end
 
             b2.Position = newpos
@@ -355,6 +368,16 @@ function Library:Reset()
                 local t2 = v["Drawings"]["Extra"]["Text"]
                 b2.Size = v2(t2.TextBounds.X+margin*4, t2.TextBounds.Y+margin*2)
                 t2.Position = v2(newpos.X+margin+t2.TextBounds.X/2, newpos.Y+margin)
+            elseif v["Type"] == "Keybind" then
+                local current = string.sub(tostring(v["Keybind"]), 14, #tostring(v["Keybind"]))
+                v["Drawings"]["Extra"]["Text"].Text = current
+
+                local newpos = v["Drawings"]["Extra"]["Main"].Position
+                local margin = 2
+                local b2 = v["Drawings"]["Extra"]["Main"]
+                local t2 = v["Drawings"]["Extra"]["Text"]
+                b2.Size = v2(t2.TextBounds.X+margin*4, t2.TextBounds.Y+margin*2)
+                t2.Position = v2(newpos.X+margin+t2.TextBounds.X/2, newpos.Y+margin)
             end
         else 
             if v["Type"] == "Toggle" then
@@ -375,6 +398,16 @@ function Library:Reset()
             elseif v["Type"] == "Dropdown" then
                 local current = v["Selected"]
                 v["Drawings"]["Extra"]["Text"].Text = "<"..v["OPTIONS"][current]..">"
+
+                local newpos = v["Drawings"]["Extra"]["Main"].Position
+                local margin = 2
+                local b2 = v["Drawings"]["Extra"]["Main"]
+                local t2 = v["Drawings"]["Extra"]["Text"]
+                b2.Size = v2(t2.TextBounds.X+margin*4, t2.TextBounds.Y+margin*2)
+                t2.Position = v2(newpos.X+margin+t2.TextBounds.X/2, newpos.Y+margin)
+            elseif v["Type"] == "Keybind" then
+                local current = string.sub(tostring(v["Keybind"]), 14, #tostring(v["Keybind"]))
+                v["Drawings"]["Extra"]["Text"].Text = current
 
                 local newpos = v["Drawings"]["Extra"]["Main"].Position
                 local margin = 2
@@ -445,6 +478,18 @@ c = UIS.InputBegan:Connect(function(input)
                         v["Drawings"]["Extra"]["Preview"].Color = col
                         v["CallBack"](col)
                         Library:Reset()
+                    elseif v["Type"] == "Keybind" then
+                        local c
+                        c = UIS.InputBegan:Connect(function(input)
+                            if DESTROY_GUI then
+                                c:Disconnect()
+                            elseif input.UserInputType == Enum.UserInputType.Keyboard then
+                                v["Keybind"] = input.KeyCode
+                                v["CallBack"](input.KeyCode)
+                                Library:Reset()
+                                c:Disconnect()
+                            end
+                        end)
                     end
                 end
             end
@@ -593,6 +638,26 @@ function Library:NewCategory(cat_name)
             ["Type"] = "Label",
             ["Drawings"] = CreateTextBox(op_name, RGB(10, 10, 10), 0.75, RGB(255, 255, 255), _G["Theme"]["Text_Size"], v2(_G["Theme"]["UI_Position"].X+10, new_y), {Type = "Label"})
         }
+        Library:Reset()
+    end
+
+    function cat_funcs:NewKeybind(op_name, default, CallBack)
+        local val = #_G["Layout"]+1
+        local new_y = GetNewYCoord()
+        _G["Layout"][val] = {
+            ["Type"] = "Keybind",
+            ["Drawings"] = CreateTextBox(op_name, RGB(10, 10, 10), 0.75, RGB(255, 255, 255), _G["Theme"]["Text_Size"], v2(_G["Theme"]["UI_Position"].X+10, new_y), {Type = "Keybind", Keybind = default}),
+            ["Keybind"] = default,
+            ["CallBack"] = CallBack
+        }
+        local c
+        c = UIS.InputBegan:Connect(function(input)
+            if DESTROY_GUI then
+                c:Disconnect()
+            elseif input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode == _G["Layout"][val]["Keybind"] then
+                CallBack()
+            end
+        end)
         Library:Reset()
     end
     return cat_funcs
