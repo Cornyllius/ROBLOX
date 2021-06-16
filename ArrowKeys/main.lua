@@ -540,9 +540,6 @@ c = UIS.InputBegan:Connect(function(input)
                 end
             end
         end
-        if input.KeyCode == Enum.KeyCode.End then
-            Library:Toggle()
-        end
     end
 end)
 spawn(function()
