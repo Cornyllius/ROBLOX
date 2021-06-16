@@ -483,7 +483,6 @@ c = UIS.InputBegan:Connect(function(input)
                         for k = 1, #(v["Drawings"]["Extra"]["Text"].Text) do
                             replace = replace .. "_"
                         end
-                        print(replace)
                         v["Drawings"]["Extra"]["Text"].Text = replace
                         local c
                         c = UIS.InputBegan:Connect(function(input)
