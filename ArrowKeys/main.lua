@@ -479,6 +479,12 @@ c = UIS.InputBegan:Connect(function(input)
                         v["CallBack"](col)
                         Library:Reset()
                     elseif v["Type"] == "Keybind" then
+                        local replace = ""
+                        for k = 1, #(v["Drawings"]["Extra"]["Text"].Text) do
+                            replace = replace .. "_"
+                        end
+                        print(replace)
+                        v["Drawings"]["Extra"]["Text"].Text = replace
                         local c
                         c = UIS.InputBegan:Connect(function(input)
                             if DESTROY_GUI then
@@ -540,6 +546,9 @@ c = UIS.InputBegan:Connect(function(input)
                 end
             end
         end
+        -- if input.KeyCode == Enum.KeyCode.End then
+        --     Library:Toggle()
+        -- end
     end
 end)
 spawn(function()
