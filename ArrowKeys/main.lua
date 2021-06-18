@@ -425,15 +425,15 @@ local UIS = game:GetService("UserInputService")
 local c
 c = UIS.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.Keyboard then
-        if input.KeyCode == Enum.KeyCode.Down then
+        if input.KeyCode == Enum.KeyCode.Down or input.KeyCode == Enum.KeyCode.Semicolon then
             selected = clamp(selected + 1, 1, n)
             Library:Reset()
         end
-        if input.KeyCode == Enum.KeyCode.Up then
+        if input.KeyCode == Enum.KeyCode.Up or input.KeyCode == Enum.KeyCode.P then
             selected = clamp(selected - 1, 1, n)
             Library:Reset()
         end
-        if input.KeyCode == Enum.KeyCode.Right then
+        if input.KeyCode == Enum.KeyCode.Right or input.KeyCode == Enum.KeyCode.Quote then
             n = #_G["Layout"]
             for i = 1, n do
                 local v = _G["Layout"][i]
@@ -499,7 +499,7 @@ c = UIS.InputBegan:Connect(function(input)
                 end
             end
         end
-        if input.KeyCode == Enum.KeyCode.Left then
+        if input.KeyCode == Enum.KeyCode.Left or input.KeyCode == Enum.KeyCode.L then
             n = #_G["Layout"]
             for i = 1, n do
                 local v = _G["Layout"][i]
