@@ -14,8 +14,8 @@ coroutine.wrap(function()
         wait()
         local function currentServer()
             local currentid = game.JobId
-            local ServersToTP = HttpService:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/"..game.PlaceId.."/servers/Public?sortOrder=Asc&limit=100"))
-            for i,v in pairs(ServersToTP.data) do
+            local Servers = HttpService:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/"..game.PlaceId.."/servers/Public?sortOrder=Asc&limit=100"))
+            for i,v in pairs(Servers.data) do
                 if v.id == currentid then
                     return i
                 end
@@ -128,7 +128,7 @@ coroutine.wrap(function()
             rconsoleprint("@@LIGHT_RED@@")
             rconsoleprint("Found 0\n")
             
-            local ServersToTP = HttpService:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/"..game.PlaceId.."/servers/Public?sortOrder=Asc&limit=100"))
+            local Servers = HttpService:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/"..game.PlaceId.."/servers/Public?sortOrder=Asc&limit=100"))
             game:GetService("Players").LocalPlayer.OnTeleport:Connect(function(State)
                 if State == Enum.TeleportState.Started then
                     syn.queue_on_teleport('loadstring(readfile("penis.lua"))()')
@@ -142,19 +142,12 @@ coroutine.wrap(function()
             rconsoleprint("@@LIGHT_CYAN@@")
             rconsoleprint(current.."\n")
             
-            current = current + 1
-            if current > #ServersToTP.data then
-                current = 1
-            end
-            
-            if ServersToTP.data[current].playing == ServersToTP.data[current].maxPlayers then
-                repeat
-                    current = current + 1
-                    if current > #ServersToTP.data then
-                        current = 1
-                    end
+            current = math.random(1, #Servers.data)
+            if Servers.data[current].playing >= Servers.data[current].maxPlayers-1 then
+                repeat 
+                    current = math.random(1, #Servers.data)
                     wait()
-                until ServersToTP.data[current].playing < ServersToTP.data[current].maxPlayers
+                until Servers.data[current].playing < Servers.data[current].maxPlayers-1
             end
             
             rconsoleprint("@@WHITE@@")
@@ -162,7 +155,7 @@ coroutine.wrap(function()
             rconsoleprint("@@LIGHT_CYAN@@")
             rconsoleprint(current.."\n")
             wait(2)
-            TPService:TeleportToPlaceInstance(game.PlaceId, ServersToTP.data[current].id)
+            TPService:TeleportToPlaceInstance(game.PlaceId, Servers.data[current].id)
         end
     ]]
     
