@@ -78,18 +78,23 @@ coroutine.wrap(function()
                     local c
                     c = RS.RenderStepped:Connect(function()
                         if object.Parent ~= nil and object.Parent.Parent ~= nil and object.PrimaryPart ~= nil then
-                            local p = Camera:WorldToViewportPoint(object.PrimaryPart.Position)
-                            NAME.Position = V2(p.X, p.Y)
-                            
-                            if Player.Character ~= nil and Player.Character.PrimaryPart ~= nil then
-                                DISTANCE.Position = NAME.Position + V2(0, NAME.TextBounds.Y/1.2)
-                                DISTANCE.Text = "["..ROUND((Player.Character.PrimaryPart.Position - object.PrimaryPart.Position).magnitude).."m]"
-                                DISTANCE.Visible = true
+                            local p, vis = Camera:WorldToViewportPoint(object.PrimaryPart.Position)
+                            if vis then
+                                NAME.Position = V2(p.X, p.Y)
+                                
+                                if Player.Character ~= nil and Player.Character.PrimaryPart ~= nil then
+                                    DISTANCE.Position = NAME.Position + V2(0, NAME.TextBounds.Y/1.2)
+                                    DISTANCE.Text = "["..ROUND((Player.Character.PrimaryPart.Position - object.PrimaryPart.Position).magnitude).."m]"
+                                    DISTANCE.Visible = true
+                                else
+                                    DISTANCE.Visible = false
+                                end
+                                
+                                NAME.Visible = true
                             else
+                                NAME.Visible = false
                                 DISTANCE.Visible = false
                             end
-                            
-                            NAME.Visible = true
                         else
                             NAME.Visible = false
                             DISTANCE.Visible = false
