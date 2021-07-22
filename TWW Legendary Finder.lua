@@ -42,7 +42,7 @@ coroutine.wrap(function()
             for i,v in pairs(game:GetService("Workspace")["WORKSPACE_Geometry"]:GetDescendants()) do
                 if v:IsA("ParticleEmitter") and v.Name == "Strike2" then
                     c = c + 1
-                    objects[c] = {"Thunderstruck Tree", v.Parent}
+                    objects[c] = {"Thunderstruck Tree", v.Parent.Parent}
                     exists = true
                 end
             end
@@ -59,11 +59,11 @@ coroutine.wrap(function()
             local ROUND = math.round
 
             local ESP = {}
-            function ESP:add(object, name) 
+            function ESP:add(object, name, col) 
                 local NAME = Drawing.new("Text")
                 NAME.Text = name
                 NAME.Size = 16
-                NAME.Color = RGB(255, 248, 145)
+                NAME.Color = col
                 NAME.Center = true
                 NAME.Visible = true
                 NAME.Transparency = 1
@@ -118,10 +118,10 @@ coroutine.wrap(function()
             for i,v in pairs(objects) do
                 if v[1] == "Legendary" then
                     rconsoleprint("Found Legendary "..v[2].Name.." !\n")
-                    ESP:add(v[2], "Legendary "..v[2].Name)
+                    ESP:add(v[2], "Legendary "..v[2].Name, RGB(255, 248, 145))
                 elseif v[1] == "Thunderstruck Tree" then
                     rconsoleprint("Found Thunderstruck Tree !\n")
-                    ESP:add(v[2], "Thunderstruck Tree")
+                    ESP:add(v[2], "Thunderstruck Tree", RGB(0, 255, 208))
                 end
             end
         else
