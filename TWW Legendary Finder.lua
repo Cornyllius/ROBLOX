@@ -12,16 +12,6 @@ coroutine.wrap(function()
         local TPService = game:GetService("TeleportService")
 
         wait()
-        local function currentServer()
-            local currentid = game.JobId
-            local Servers = HttpService:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/"..game.PlaceId.."/servers/Public?sortOrder=Asc&limit=100"))
-            for i,v in pairs(Servers.data) do
-                if v.id == currentid then
-                    return i
-                end
-            end
-        end
-
         local function check()
             rconsoleprint("@@LIGHT_CYAN@@")
             rconsoleprint("Waiting for game...\n")
@@ -135,27 +125,20 @@ coroutine.wrap(function()
                 end
             end)
             
-            local current = currentServer()
-            
-            rconsoleprint("@@WHITE@@")
-            rconsoleprint("Current server: ")
-            rconsoleprint("@@LIGHT_CYAN@@")
-            rconsoleprint(current.."\n")
-            
-            current = math.random(1, #Servers.data)
-            if Servers.data[current].playing >= Servers.data[current].maxPlayers-1 then
+            local new = math.random(1, #Servers.data)
+            if Servers.data[new].playing >= Servers.data[new].maxPlayers-1 then
                 repeat 
-                    current = math.random(1, #Servers.data)
+                    new = math.random(1, #Servers.data)
                     wait()
-                until Servers.data[current].playing < Servers.data[current].maxPlayers-1
+                until Servers.data[new].playing < Servers.data[new].maxPlayers-1
             end
             
             rconsoleprint("@@WHITE@@")
             rconsoleprint("Teleporting to Server: ")
             rconsoleprint("@@LIGHT_CYAN@@")
-            rconsoleprint(current.."\n")
+            rconsoleprint(new.."\n")
             wait(2)
-            TPService:TeleportToPlaceInstance(game.PlaceId, Servers.data[current].id)
+            TPService:TeleportToPlaceInstance(game.PlaceId, Servers.data[new].id)
         end
     ]]
     
