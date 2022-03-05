@@ -12,9 +12,9 @@ local Page = 0;
 repeat
     local Url = "https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?sortOrder=Asc&limit=100";
     if (nextCursor) then Url = Url .. "&cursor=" .. nextCursor end;
-    local Servers = HttpService:JSONDecode(game:HttpGet(Url));
 
-    if Servers then
+    local Servers = HttpService:JSONDecode(game:HttpGet(Url));
+    if (Servers) then
         nextCursor = Servers.nextPageCursor or nil;
         Page = Page + 1;
         for _,v in pairs(Servers.data) do
