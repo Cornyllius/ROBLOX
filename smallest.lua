@@ -10,8 +10,8 @@ local minimum = math.huge;
 
 local Page = 0;
 repeat
-    local Url = "https://games.roblox.com/v1/games/"..game.PlaceId.."/servers/Public?sortOrder=Asc&limit=100";
-    if (nextCursor) then Url = Url.."&cursor="..nextCursor end;
+    local Url = "https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?sortOrder=Asc&limit=100";
+    if (nextCursor) then Url = Url .. "&cursor=" .. nextCursor end;
     local Servers = HttpService:JSONDecode(game:HttpGet(Url));
 
     if Servers then
@@ -30,6 +30,6 @@ repeat
 until (not nextCursor) or (Page >= pageLimit);
 
 if (serverId) then -- Teleport
-    warn("Teleporting to:", tostring(serverId));
+    warn("Teleporting to: " .. tostring(serverId) .. ", Player Count: " .. minimum);
     TPService:TeleportToPlaceInstance(game.PlaceId, serverId);
 end
