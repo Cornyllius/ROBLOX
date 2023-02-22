@@ -92,7 +92,7 @@ local script = [[
         --          ESP Library
         ------------------------------------
         local ESP = {}
-        function ESP:add(object, name, col) 
+        function ESP:add(object, name, col, type) 
             local NAME = DRAW("Text")
             NAME.Text = name
             NAME.Size = 16
@@ -105,27 +105,32 @@ local script = [[
             NAME.OutlineColor = RGB(10, 10, 10)
             NAME.Font = 3
             
-            local DISTANCE = DRAW("Text")
-            DISTANCE.Text = "[]"
-            DISTANCE.Size = 14
-            DISTANCE.Color = RGB(255, 255, 255)
-            DISTANCE.Center = true
-            DISTANCE.Visible = true
-            DISTANCE.Transparency = 1
-            DISTANCE.Position = V2(0, 0)
-            DISTANCE.Outline = true
-            DISTANCE.OutlineColor = RGB(10, 10, 10)
-            DISTANCE.Font = 3
+            local INFO = DRAW("Text")
+            INFO.Text = "[]"
+            INFO.Size = 14
+            INFO.Color = RGB(255, 255, 255)
+            INFO.Center = true
+            INFO.Visible = true
+            INFO.Transparency = 1
+            INFO.Position = V2(0, 0)
+            INFO.Outline = true
+            INFO.OutlineColor = RGB(10, 10, 10)
+            INFO.Font = 3
+
+            local startHealth = 0
+            if type == "Animal" and object:FindFirstChild("Health") then
+                startHealth = object.Health.Value
+            end
             
             local function Update()
                 local c
                 c = RS.RenderStepped:Connect(function()
                     if not (object.Parent and object.Parent.Parent and object.PrimaryPart) then
                         NAME.Visible = false
-                        DISTANCE.Visible = false
+                        INFO.Visible = false
                         if not object.Parent or not object.Parent.Parent then
                             NAME:Remove()
-                            DISTANCE:Remove()
+                            INFO:Remove()
                             c:Disconnect()
                         end
 
@@ -137,17 +142,24 @@ local script = [[
                         NAME.Position = V2(pos.X, pos.Y)
                         
                         if Player.Character and Player.Character.PrimaryPart then
-                            DISTANCE.Position = NAME.Position + V2(0, NAME.TextBounds.Y/1.2)
-                            DISTANCE.Text = "["..ROUND((Player.Character.PrimaryPart.Position - object.PrimaryPart.Position).magnitude).."m]"
-                            DISTANCE.Visible = true
+                            INFO.Position = NAME.Position + V2(0, NAME.TextBounds.Y/1.2)
+                            local distText = "["..ROUND((Player.Character.PrimaryPart.Position - object.PrimaryPart.Position).magnitude).."m]"
+                            
+                            local healthText = ""
+                            if type == "Animal" and object:FindFirstChild("Health") then
+                                healthText = "["..ROUND(object.Health.Value).."/"..startHealth.."]"
+                            end
+
+                            INFO.Text = distText .. healthText
+                            INFO.Visible = true
                         else
-                            DISTANCE.Visible = false
+                            INFO.Visible = false
                         end
                         
                         NAME.Visible = true
                     else
                         NAME.Visible = false
-                        DISTANCE.Visible = false
+                        INFO.Visible = false
                     end
                 end)
             end
@@ -163,10 +175,10 @@ local script = [[
         for _,v in next, result do
             if v[1] == "Animal" then
                 rconsoleprint("Found Legendary "..v[2].Name.." !\n", "red")
-                ESP:add(v[2], "Legendary "..v[2].Name, RGB(255, 248, 145))
+                ESP:add(v[2], "Legendary "..v[2].Name, RGB(255, 248, 145), "Animal")
             elseif v[1] == "Tree" then
                 rconsoleprint("Found Thunderstruck Tree !\n", "red")
-                ESP:add(v[2], "Thunderstruck Tree", RGB(0, 255, 208))
+                ESP:add(v[2], "Thunderstruck Tree", RGB(0, 255, 208), "Tree")
             end
         end
     else
